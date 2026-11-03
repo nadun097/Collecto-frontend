@@ -136,17 +136,19 @@ export function ProgressBar({ pct, height = 8 }: { pct: number; height?: number 
 }
 
 /** Striped rider target track with a marker (dashboard & riders screen). */
-export function TargetTrack({ pct }: { pct: number }) {
+const TRACK = {
+  violet: { fill: "linear-gradient(90deg,#C4B5FD,#7C5CFA)", mark: "#7C5CFA" },
+  green: { fill: "linear-gradient(90deg,#86EFAC,#22C55E)", mark: "#16A34A" },
+};
+export function TargetTrack({ pct, tone = "violet" }: { pct: number; tone?: keyof typeof TRACK }) {
+  const t = TRACK[tone];
   return (
-    <div className="track-striped relative mt-1.5 mb-0.5 h-[26px] rounded-[7px]">
-      <div
-        className="absolute inset-y-0 left-0 overflow-hidden rounded-[7px] shadow-[inset_0_1px_0_rgba(255,255,255,.3)]"
-        style={{ width: `${pct}%`, background: "linear-gradient(90deg,#C4B5FD,#7C5CFA)" }}
-      >
+    <div className="track-striped relative mt-1.5 mb-0.5 h-[26px] rounded-[7px]" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>
+      <div className="absolute inset-y-0 left-0 overflow-hidden rounded-[7px] shadow-[inset_0_1px_0_rgba(255,255,255,.3)]" style={{ width: `${pct}%`, background: t.fill }}>
         <span className="absolute top-1/2 right-2 -translate-y-1/2 whitespace-nowrap text-xs font-semibold text-white">{pct >= 14 ? `${pct}%` : ""}</span>
       </div>
-      <div className="absolute -top-[5px] -bottom-[3px] w-[3px] rounded-[3px] bg-brand" style={{ left: `min(calc(${pct}% + 3px), calc(100% - 3px))` }}>
-        <span className="absolute -top-[3px] left-1/2 -ml-1 size-2 rounded-full bg-brand shadow-[0_0_0_2px_#fff]" />
+      <div className="absolute -top-[5px] -bottom-[3px] w-[3px] rounded-[3px]" style={{ background: t.mark, left: `min(calc(${pct}% + 3px), calc(100% - 3px))` }}>
+        <span className="absolute -top-[3px] left-1/2 -ml-1 size-2 rounded-full shadow-[0_0_0_2px_#fff]" style={{ background: t.mark }} />
       </div>
     </div>
   );
