@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { RiderCustomerRow } from "@/components/rider/customer-row";
+import { RiderVisitList } from "@/components/rider/customer-row";
 import { PillSearch, SegmentedChips } from "@/components/ui-collecto/primitives";
 import { RANK } from "@/lib/calc";
 import { useRider } from "@/hooks/use-rider";
@@ -35,11 +35,7 @@ export default function RiderCustomersPage() {
         <PillSearch value={q} onChange={setQ} placeholder="Name, address or phone" label="Search customers" />
       </div>
       <SegmentedChips options={FILTERS} value={st} onChange={setSt} />
-      <div className="flex flex-col">
-        {list.map((c) => (
-          <RiderCustomerRow key={c.id} c={c} sub={`${c.city} · ${c.phone}`} />
-        ))}
-      </div>
+      <RiderVisitList key={`${st}|${q}`} customers={list} />
       {!list.length && <div className="p-5 text-center text-sm text-muted-ink">No customers found.</div>}
     </>
   );

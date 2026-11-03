@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { Icon } from "@/components/icon";
-import { RiderCustomerRow } from "@/components/rider/customer-row";
+import { RiderVisitList } from "@/components/rider/customer-row";
 import { Avatar } from "@/components/ui-collecto/primitives";
 import { TODAY, fmt, pd } from "@/lib/calc";
 import { greeting, useRider } from "@/hooks/use-rider";
@@ -85,11 +85,7 @@ export default function RiderHomePage() {
       </div>
 
       <h2 className="m-0 mt-1 text-base font-semibold text-ink">Today&apos;s visits</h2>
-      <div className="flex flex-col">
-        {todays.map((c) => (
-          <RiderCustomerRow key={c.id} c={c} sub={`${c.address}, ${c.city}`} />
-        ))}
-      </div>
+      <RiderVisitList customers={todays} />
       {!todays.length && <div className="rounded-xl border border-dashed border-line-input bg-white p-5 text-center text-sm text-muted-ink">No collections scheduled today.</div>}
     </>
   );
