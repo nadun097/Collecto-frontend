@@ -17,15 +17,20 @@ export function Topbar({ narrow, onMenu }: { narrow: boolean; onMenu: () => void
   const { group, crumb, icon } = navFromPath(pathname);
   const data = useAppStore((s) => s.data);
   const openModal = useUI((s) => s.open);
-  const [menu, setMenu] = useState<"notif" | "user" | null>(null);
+  // popovers remember the route they were opened on, so navigating closes them
+  const [open, setOpen] = useState<{ which: "notif" | "user"; at: string } | null>(null);
+  const menu = open && open.at === pathname ? open.which : null;
+  const setMenu = (fn: (m: typeof menu) => typeof menu) => {
+    const which = fn(menu);
+    setOpen(which ? { which, at: pathname } : null);
+  };
 
-  // close popovers on Escape and on navigation
+  // close popovers on Escape
   useEffect(() => {
-    const k = (e: KeyboardEvent) => e.key === "Escape" && setMenu(null);
+    const k = (e: KeyboardEvent) => e.key === "Escape" && setOpen(null);
     window.addEventListener("keydown", k);
     return () => window.removeEventListener("keydown", k);
   }, []);
-  useEffect(() => setMenu(null), [pathname]);
 
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-2.5 border-b border-line bg-white/92 px-[clamp(12px,2.2vw,24px)] backdrop-blur-[8px]">
@@ -78,7 +83,7 @@ export function Topbar({ narrow, onMenu }: { narrow: boolean; onMenu: () => void
       )}
 
       <NotificationsButton open={menu === "notif"} onToggle={() => setMenu((m) => (m === "notif" ? null : "notif"))} />
-      <AccountMenu narrow={narrow} open={menu === "user"} onToggle={() => setMenu((m) => (m === "user" ? null : "user"))} onClose={() => setMenu(null)} />
+      <AccountMenu narrow={narrow} open={menu === "user"} onToggle={() => setMenu((m) => (m === "user" ? null : "user"))} onClose={() => setOpen(null)} />
     </header>
   );
 }

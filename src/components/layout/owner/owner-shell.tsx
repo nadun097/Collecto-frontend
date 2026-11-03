@@ -1,6 +1,6 @@
 "use client";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNarrow } from "@/hooks/use-media";
 import { Modals } from "@/components/modals/modals";
 import { Sidebar } from "./sidebar";
@@ -8,9 +8,11 @@ import { Topbar } from "./topbar";
 
 export function OwnerShell({ children }: { children: React.ReactNode }) {
   const narrow = useNarrow(960);
-  const [drawer, setDrawer] = useState(false);
   const pathname = usePathname();
-  useEffect(() => setDrawer(false), [pathname, narrow]);
+  // the drawer remembers the route it was opened on, so navigating closes it
+  const [drawerAt, setDrawerAt] = useState<string | null>(null);
+  const drawer = narrow && drawerAt === pathname;
+  const setDrawer = (open: boolean) => setDrawerAt(open ? pathname : null);
 
   return (
     <div className="flex min-h-screen bg-white">
