@@ -20,8 +20,9 @@ export default function RiderProfilePage() {
     ["Assigned customers", String(mine.length)],
     ["Collected this month", fmt(month)],
   ];
-  const head = (title: string, sub: string) => (
-    <div className="flex min-w-0 flex-[1_1_200px] flex-col gap-0.5">
+  // `inRow` headings sit beside an action button and may wrap; flex-basis only applies there
+  const head = (title: string, sub: string, inRow = false) => (
+    <div className={`flex min-w-0 flex-col gap-0.5 ${inRow ? "flex-[1_1_200px]" : ""}`}>
       <h2 className="m-0 text-[15px] font-semibold tracking-normal text-ink">{title}</h2>
       <span className="text-13 text-muted-ink">{sub}</span>
     </div>
@@ -61,14 +62,14 @@ export default function RiderProfilePage() {
 
       <section className="flex flex-col gap-3.5">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          {head("Daily closing", "Submit today's collected cash to the shop.")}
+          {head("Daily closing", "Submit today's collected cash to the shop.", true)}
           <Link href="/rider/closing" className="grid h-[38px] place-items-center rounded-lg px-3.5 text-sm font-semibold text-brand hover:bg-brand-soft hover:no-underline">
             Open
           </Link>
         </div>
         <div className="flex flex-wrap items-center justify-between gap-3">
-          {head("Sign out", "Log out of COLLECTO on this device.")}
-          <button onClick={logout} className="h-[38px] rounded-lg border-0 bg-transparent px-3.5 text-sm font-semibold text-danger hover:bg-danger-soft">
+          {head("Sign out", "Log out of COLLECTO on this device.", true)}
+          <button onClick={logout} className="h-[38px] rounded-lg border-0 bg-danger-soft px-3.5 text-sm font-semibold text-danger hover:bg-[#FFE0E5]">
             Log out
           </button>
         </div>
