@@ -98,14 +98,21 @@ function NotificationsButton({ open, onToggle }: { open: boolean; onToggle: () =
         onClick={onToggle}
         aria-label="Notifications"
         aria-expanded={open}
-        className="relative grid size-9 place-items-center rounded-full border-0 bg-transparent text-body hover:bg-hover"
+        className="grid size-9 place-items-center rounded-full border-0 bg-transparent text-body hover:bg-hover"
       >
-        <Icon name="ic-bell" size={20} />
-        {unread > 0 && (
-          <span className="absolute top-0 -right-0.5 grid h-[18px] min-w-[18px] place-items-center rounded-full border-2 border-white bg-[#F43F5E] px-[5px] text-[10.5px] font-bold text-white">
-            {unread}
-          </span>
-        )}
+        {/* badge is anchored to the icon's top-right corner so it never hides the bell */}
+        <span className="relative block size-5">
+          <Icon name="ic-bell" size={20} className="block" />
+          {unread > 0 && (
+            <span
+              aria-hidden
+              className="absolute -top-[7px] -right-[9px] grid h-4 min-w-4 place-items-center rounded-full bg-[#F43F5E] px-1 text-[10px] leading-none font-bold text-white ring-2 ring-white"
+            >
+              {unread > 9 ? "9+" : unread}
+            </span>
+          )}
+        </span>
+        <span className="sr-only">{unread > 0 ? `${unread} unread` : "No unread notifications"}</span>
       </button>
       {open && (
         <>
