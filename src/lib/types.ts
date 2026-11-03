@@ -116,6 +116,17 @@ export interface Closing {
   note: string;
 }
 
+/** A rider-granted payment extension (customer promised to pay on `until`). */
+export interface Extension {
+  id: string;
+  customerId: string;
+  riderId: string;
+  date: string;
+  time: string;
+  until: string;
+  reason: string;
+}
+
 export interface AppData {
   v: 1;
   seq: number;
@@ -129,6 +140,8 @@ export interface AppData {
   audit: AuditEntry[];
   notifs: Notification[];
   closings: Closing[];
+  /** optional so data saved before this feature still loads */
+  extensions?: Extension[];
 }
 
 export interface Session {

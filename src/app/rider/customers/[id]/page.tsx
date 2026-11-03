@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { ExtensionNote } from "@/components/ui-collecto/extension-note";
 import { Avatar, StatusChip } from "@/components/ui-collecto/primitives";
 import { fd, fmt } from "@/lib/calc";
 import { itemLabel } from "@/lib/selectors";
@@ -49,6 +50,8 @@ export default function RiderCustomerDetailPage() {
           </a>
         </div>
       </div>
+
+      <ExtensionNote customerId={c.id} />
 
       <div className="grid grid-cols-3 gap-2">
         {stat("Due now", fmt(c.dueNow))}

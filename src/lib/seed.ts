@@ -128,5 +128,6 @@ export function buildSeed(): AppData {
     audit,
     notifs,
     closings: [],
+    extensions: [],
   };
 }

@@ -216,6 +216,11 @@ export function reportToCsv(r: Report) {
   return [r.cols.map((c) => esc(c.v)).join(","), ...r.rows.map((x) => x.map((c) => esc(c.v)).join(","))].join("\n");
 }
 
+/** The latest extension for a customer that is still in force (promised date today or later). */
+export function activeExtension(d: AppData, customerId: string) {
+  return (d.extensions ?? []).filter((e) => e.customerId === customerId && e.until >= TODAY).at(-1) ?? null;
+}
+
 /** Customer search used by the global search and the Customers screen. */
 export function matchCustomer(c: { name: string; nic: string; phone: string }, query: string) {
   const q = query.trim().toLowerCase();

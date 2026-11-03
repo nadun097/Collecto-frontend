@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { ExtensionNote } from "@/components/ui-collecto/extension-note";
 import { ItemCard } from "@/components/ui-collecto/item-card";
 import { Avatar, Btn, StatusChip } from "@/components/ui-collecto/primitives";
 import { fd, fmt, proj } from "@/lib/calc";
@@ -74,6 +75,7 @@ export default function CustomerProfilePage() {
               Add item
             </Btn>
           </div>
+          <ExtensionNote customerId={c.id} />
           <div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-x-6 gap-y-4">
             {info("NIC", c.nic)}
             {info("Phone", <a href={`tel:${c.phone.replace(/\D/g, "")}`}>{c.phone}</a>)}

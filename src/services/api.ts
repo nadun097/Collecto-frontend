@@ -13,6 +13,7 @@ export const api = {
   customers: {
     create: (f: CustomerForm) => Promise.resolve(s().saveCustomer(f)),
     assignRider: (customerId: string, riderId: string) => Promise.resolve(s().assignRider(customerId, riderId)),
+    extendPayment: (customerId: string, until: string, reason: string) => Promise.resolve(s().extendPayment(customerId, until, reason)),
   },
   items: {
     create: (f: ItemForm) => Promise.resolve(s().saveItem(f)),

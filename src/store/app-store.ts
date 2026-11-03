@@ -5,7 +5,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { useMemo } from "react";
-import { AREAS, TODAY, fmt, nowT, sum, txnId } from "@/lib/calc";
+import { AREAS, TODAY, addD, fd, fmt, nowT, sum, txnId } from "@/lib/calc";
 import { buildSeed } from "@/lib/seed";
 import { derive } from "@/lib/selectors";
 import type { AppData, Freq, LastTx, Session } from "@/lib/types";
@@ -55,6 +55,7 @@ interface AppState {
   updateShop: (k: "name" | "phone" | "address", v: string) => void;
   recordPayments: (customerId: string, lines: { itemId: string; amount: number }[]) => LastTx;
   submitClosing: (input: { cash: string; note: string; expected: number; collected: number; pending: number; count: number }) => Result;
+  extendPayment: (customerId: string, until: string, reason: string) => Result;
   resetDemo: () => void;
 }
 
@@ -274,6 +275,22 @@ export const useAppStore = create<AppState>()(
           mut((x) => {
             x.closings.push({ id: "CL" + Date.now(), riderId: me.id, date: TODAY, time: t, expected, collected, pending, cash, count, note: note.trim() });
             x.notifs.unshift({ id: "N" + Date.now(), type: "closing", title: "Daily closing submitted", text: me.name + " · collected " + fmt(collected) + ", cash submitted " + fmt(cash) + (diff ? " (difference " + fmt(diff) + ")" : ""), date: TODAY, time: t, read: false });
+          });
+          return ok(undefined);
+        },
+
+        extendPayment: (customerId, until, reason) => {
+          const { session, data } = get();
+          const me = data.riders.find((r) => r.id === session?.riderId);
+          const c = data.customers.find((x) => x.id === customerId);
+          if (!me || !c) return fail("Customer not found.");
+          if (!until || until <= TODAY) return fail("Choose a date after today.");
+          if (until > addD(TODAY, 30)) return fail("An extension can be at most 30 days.");
+          if (reason.trim().length < 3) return fail("Add a short reason for the extension.");
+          const t = nowT();
+          mut((x) => {
+            (x.extensions ??= []).push({ id: "E" + Date.now(), customerId, riderId: me.id, date: TODAY, time: t, until, reason: reason.trim() });
+            x.notifs.unshift({ id: "N" + Date.now(), type: "system", title: "Payment extended", text: `${c.name} promised to pay on ${fd(until)} · ${me.name}: ${reason.trim()}`, date: TODAY, time: t, read: false });
           });
           return ok(undefined);
         },
