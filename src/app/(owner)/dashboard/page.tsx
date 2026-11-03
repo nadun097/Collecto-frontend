@@ -148,7 +148,7 @@ export default function DashboardPage() {
               ["Register customer", () => open({ type: "customer" })],
               ["Add item / installment", () => open({ type: "item" })],
               ["Add rider", () => open({ type: "rider", rider: null })],
-              ["Today's collection report", () => router.push("/reports?rep=daily")],
+              ["Today's collection report", () => router.push("/reports")],
             ] as const
           ).map(([l, fn]) => (
             <button key={l} onClick={fn} className="h-11 rounded-lg border border-line-input bg-white px-3.5 text-left text-sm font-medium text-ink hover:bg-hover">
